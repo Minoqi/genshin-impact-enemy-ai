@@ -10,11 +10,13 @@ public class EnemyIdleState : EnemyBaseState
     public override void EnterState(EnemyStateManager enemy)
     {
         Debug.Log("Entered Idle State");
+        idleTimeLeft = Random.Range(enemy.idleWaitTimeMin, enemy.idleWaitTimeMax);
+        Debug.Log("Wait Time: " + idleTimeLeft);
     }
 
     public override void UpdateState(EnemyStateManager enemy)
     {
-
+        StandForXSeconds(enemy);
     }
 
     public override void OnCollisionEnter(EnemyStateManager enemy, Collision colission)
@@ -22,7 +24,7 @@ public class EnemyIdleState : EnemyBaseState
 
     }
 
-    bool StandForXSeconds()
+    void StandForXSeconds(EnemyStateManager enemy)
     {
         if (idleTimeLeft >= 0) // Continue idling
         {
@@ -30,9 +32,7 @@ public class EnemyIdleState : EnemyBaseState
         }
         else // Wander to new location
         {
-
+            enemy.SwitchState(enemy.WalkState);
         }
     }
-
-    // to switch states do enemy.SwitchState(enemy.stateName);
 }

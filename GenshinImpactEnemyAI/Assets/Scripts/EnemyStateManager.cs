@@ -16,6 +16,10 @@ public class EnemyStateManager : MonoBehaviour
 
     // Stats
     public float idleWaitTimeMin, idleWaitTimeMax;
+    public float speed;
+    public Transform[] wanderPoints;
+    public Transform baseCenter;
+    public float baseRange;
 
     // Start is called before the first frame update
     void Start()
@@ -35,9 +39,17 @@ public class EnemyStateManager : MonoBehaviour
         currentState.OnCollisionEnter(this, collision);
     }
 
-    void SwitchState(EnemyBaseState state)
+    public void SwitchState(EnemyBaseState state)
     {
         currentState = state;
         state.EnterState(this);
+    }
+
+    public void CheckForIntruder()
+    {
+        if ()
+        {
+
+        }
     }
 }
