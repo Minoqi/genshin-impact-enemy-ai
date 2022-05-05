@@ -6,17 +6,31 @@ public class EnemyWalkState : EnemyBaseState
 {
     // Variables
     public Transform target;
+    public float timeLeftTilAttackAgain;
 
     public override void EnterState(EnemyStateManager enemy)
     {
-        Debug.Log("Entered Walk State");
         target = enemy.wanderPoints[Random.Range(0, enemy.wanderPoints.Length)];
-        Debug.Log("Current destination target: " + target);
+
+        // Adjust UI
+        string newUIText = "Idle" + "\n" + "> Walk" + "\n" + "Pre-Attack" + "\n" + "Attack" + "\n" + "Hurt" + "\n" + "Die";
+        enemy.currentStatusUI.text = newUIText;
     }
 
     public override void UpdateState(EnemyStateManager enemy)
     {
         MoveToTarget(enemy);
+
+        if (timeLeftTilAttackAgain > 0)
+        {
+            timeLeftTilAttackAgain -= Time.deltaTime;
+        }
+        else
+        {
+            enemy.CheckForIntruder(enemy);
+        }
+
+        enemy.TakeDamage(enemy);
     }
 
     public override void OnCollisionEnter(EnemyStateManager enemy, Collision colission)
@@ -27,10 +41,10 @@ public class EnemyWalkState : EnemyBaseState
     void MoveToTarget(EnemyStateManager enemy)
     {
         // Move
-        enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.position, enemy.speed * Time.deltaTime);
+        enemy.gameObject.transform.position = Vector3.MoveTowards(enemy.gameObject.transform.position, target.position, enemy.speed * Time.deltaTime);
 
         // Check if at target
-        if (Vector2.Distance(target.position, enemy.transform.position) < 0.25f)
+        if (Vector2.Distance(target.position, enemy.gameObject.transform.position) < 0.25f)
         {
             enemy.SwitchState(enemy.IdleState);
         }

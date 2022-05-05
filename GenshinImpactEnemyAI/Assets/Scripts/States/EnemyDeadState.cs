@@ -6,7 +6,11 @@ public class EnemyDeadState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
-        Debug.Log("Entered Dead State");
+        // Adjust UI
+        string newUIText = "Idle" + "\n" + "Walk" + "\n" + "Pre-Attack" + "\n" + "Attack" + "\n" + "Hurt" + "\n" + "> Die";
+        enemy.currentStatusUI.text = newUIText;
+
+        Die(enemy);
     }
 
     public override void UpdateState(EnemyStateManager enemy)
@@ -17,5 +21,10 @@ public class EnemyDeadState : EnemyBaseState
     public override void OnCollisionEnter(EnemyStateManager enemy, Collision colission)
     {
 
+    }
+
+    private void Die(EnemyStateManager enemy)
+    {
+        enemy.gameObject.SetActive(false);
     }
 }

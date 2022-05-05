@@ -5,18 +5,23 @@ using UnityEngine;
 public class EnemyIdleState : EnemyBaseState
 {
     // Variables
-    public float idleTimeLeft;
+    private float idleTimeLeft;
 
     public override void EnterState(EnemyStateManager enemy)
     {
-        Debug.Log("Entered Idle State");
+        // Set time
         idleTimeLeft = Random.Range(enemy.idleWaitTimeMin, enemy.idleWaitTimeMax);
-        Debug.Log("Wait Time: " + idleTimeLeft);
+
+        // Adjust UI
+        string newUIText = "> Idle" + "\n" + "Walk" + "\n" + "Pre-Attack" + "\n" + "Attack" + "\n" + "Hurt" + "\n" + "Die";
+        enemy.currentStatusUI.text = newUIText;
     }
 
     public override void UpdateState(EnemyStateManager enemy)
     {
         StandForXSeconds(enemy);
+        enemy.CheckForIntruder(enemy);
+        enemy.TakeDamage(enemy);
     }
 
     public override void OnCollisionEnter(EnemyStateManager enemy, Collision colission)
